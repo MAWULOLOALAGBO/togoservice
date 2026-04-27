@@ -2,39 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --togo-green: #006A4E;
+  --togo-yellow: #FFCE00;
+  --togo-red: #D21034;
+}
+
 body {
-  @apply bg-togo-bg text-togo-dark;
+  @apply bg-gray-50 text-gray-900;
   background-image: 
-    linear-gradient(135deg, rgba(0,153,51,0.03) 0%, rgba(255,215,0,0.03) 50%, rgba(220,20,60,0.03) 100%);
+    repeating-linear-gradient(0deg, rgba(0, 106, 78, 0.02) 0px, rgba(0, 106, 78, 0.02) 2px, transparent 2px, transparent 4px),
+    repeating-linear-gradient(90deg, rgba(255, 206, 0, 0.02) 0px, rgba(255, 206, 0, 0.02) 2px, transparent 2px, transparent 4px);
 }
 
 /* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+@keyframes flagWave { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-.animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
-}
+.animate-fade-in-up { animation: fadeInUp 0.4s ease-out forwards; }
+.animate-pulse-slow { animation: pulse 3s ease-in-out infinite; }
 
-/* Classes utilitaires Togo */
-.card-hover {
-  @apply transition-all duration-200 hover:shadow-xl hover:-translate-y-1 border-togo-green/10;
-}
-
-.btn-togo {
-  @apply bg-togo-green hover:bg-green-700 text-white font-semibold py-2.5 px-5 rounded-lg transition-all duration-200 active:scale-95 shadow-md hover:shadow-lg;
-}
-
-.header-togo {
-  @apply bg-gradient-to-r from-togo-green via-togo-yellow to-togo-red text-white;
+/* Header */
+.header-flag {
+  @apply text-white relative overflow-hidden;
+  background: linear-gradient(90deg, var(--togo-green), var(--togo-yellow), var(--togo-red));
   background-size: 200% 200%;
-  animation: gradientMove 6s ease infinite;
+  animation: flagWave 8s ease infinite;
+}
+.header-flag::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(0,0,0,0.1) 100%);
+  pointer-events: none;
 }
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Cartes */
+.card-provider {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 p-5 transition-all duration-300;
 }
+.card-provider:hover {
+  @apply shadow-xl -translate-y-1 border-green-300;
+}
+
+/* Boutons */
+.btn-togo {
+  @apply bg-green-800 hover:bg-green-900 text-white font-semibold py-2.5 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-95;
+}
+.btn-togo-secondary {
+  @apply bg-red-600 hover:bg-red-700 text-white font-semibold py-2.5 px-5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-95;
+}
+.btn-whatsapp {
+  @apply bg-[#25D366] hover:bg-green-600 text-white font-bold py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg active:scale-95;
+}
+
+/* Inputs */
+.input-togo {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-700 focus:border-transparent transition-all;
+}
+
+/* Badge */
+.badge-metier {
+  @apply inline-block bg-green-50 text-green-800 text-xs px-2.5 py-1 rounded-full font-medium border border-green-100;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { @apply bg-gray-100; }
+::-webkit-scrollbar-thumb { @apply bg-gray-300 rounded-full hover:bg-gray-400 transition; }

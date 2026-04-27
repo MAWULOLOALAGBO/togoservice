@@ -14,12 +14,12 @@ export default async function Home({ searchParams }: {
   const ville = searchParams.ville || '';
   const metier = searchParams.metier || '';
   
-  // ✅ CORRECTION: Utiliser 'data' pas 'allData'
+  // Récupérer tous les prestataires
   const {  data } = await supabase
     .from('providers')
     .select('*');
 
-  // Filtrer les résultats
+  // Appliquer les filtres
   let filteredData = data || [];
 
   if (search) {
@@ -48,23 +48,35 @@ export default async function Home({ searchParams }: {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       
-      {/* HEADER */}
-      <header className="bg-gradient-to-r from-[#006A4E] via-[#FFCE00] to-[#D21034] text-white p-4 shadow-lg sticky top-0 z-50">
+      {/* 🔵 HEADER AVEC DRAPEAU ANIMÉ */}
+      <header className="header-flag p-4 shadow-lg sticky top-0 z-50">
         <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <div className="flex items-center gap-2">
-            <span className="text-3xl">🇹🇬</span>
+          <div className="flex items-center gap-3">
+            {/* Armoiries stylisées */}
+            <div className="flex items-center gap-1">
+              <span className="text-3xl animate-pulse-slow">🇹🇬</span>
+              <div className="w-8 h-6 bg-white rounded-sm flex items-center justify-center text-[8px] font-bold text-[#006A4E] border border-[#006A4E]">
+                ★
+              </div>
+            </div>
             <div>
-              <h1 className="text-xl font-bold tracking-wide">TogoService</h1>
-              <p className="text-xs opacity-90">Prestataires locaux</p>
+              <h1 className="text-xl font-bold tracking-wide drop-shadow-sm">TogoService</h1>
+              <p className="text-xs opacity-90">Prestataires locaux de confiance</p>
             </div>
           </div>
+          
           <nav className="flex gap-4 text-sm font-medium">
-            <Link href="/login" className="hover:text-white/80 transition">Connexion</Link>
-            <Link href="/register" className="bg-white text-[#006A4E] px-4 py-1.5 rounded-lg font-bold hover:bg-gray-100 transition shadow-md">
-              S'inscrire
+            <Link href="/login" className="hover:text-white/90 transition flex items-center gap-1">
+              <span>👤</span> Connexion
+            </Link>
+            <Link href="/register" className="bg-white text-[#006A4E] px-4 py-1.5 rounded-lg font-bold hover:bg-gray-100 transition shadow-md flex items-center gap-1">
+              <span>✨</span> S'inscrire
             </Link>
           </nav>
         </div>
+        
+        {/* Ligne décorative drapeau */}
+        <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#006A4E] via-[#FFCE00] to-[#D21034]"></div>
       </header>
 
       {/* HERO */}
@@ -80,12 +92,12 @@ export default async function Home({ searchParams }: {
         </div>
       </section>
 
-      {/* CONTENU */}
+      {/* CONTENU PRINCIPAL */}
       <main className="flex-1 p-4">
         <div className="max-w-4xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             
-            {/* Filtres - On passe TOUTES les données */}
+            {/* Filtres */}
             <div className="md:col-span-1">
               <Filters providers={data || []} />
             </div>
@@ -100,17 +112,18 @@ export default async function Home({ searchParams }: {
                 </p>
               </div>
 
-              {/* Liste */}
+              {/* Liste des prestataires */}
               {filteredData.length > 0 ? (
-                filteredData.map((p: any) => (
+                filteredData.map((p: any, index: number) => (
                   <article
                     key={p.id}
-                    className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+                    className="card-provider animate-fade-in-up"
+                    style={{ animationDelay: `${index * 80}ms` }}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <div>
                         <h3 className="font-bold text-lg text-gray-900">{p.nom}</h3>
-                        <span className="inline-block bg-green-50 text-[#006A4E] text-xs px-2.5 py-1 rounded-full font-medium mt-1">
+                        <span className="badge-metier mt-1">
                           {p.metier}
                         </span>
                       </div>
@@ -128,7 +141,7 @@ export default async function Home({ searchParams }: {
                       href={`https://wa.me/${p.telephone?.replace(/\D/g, '')}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="block w-full text-center bg-[#25D366] hover:bg-green-600 text-white py-2.5 rounded-lg font-bold transition-all duration-200 shadow-md hover:shadow-lg active:scale-95"
+                      className="btn-whatsapp block w-full text-center"
                     >
                       💬 Contacter sur WhatsApp
                     </a>
@@ -138,6 +151,7 @@ export default async function Home({ searchParams }: {
                 <div className="text-center py-12 bg-white rounded-xl shadow">
                   <div className="text-4xl mb-3">🔍</div>
                   <p className="text-gray-500 text-lg">Aucun résultat</p>
+                  <p className="text-sm text-gray-400 mt-1">Essayez de modifier vos filtres</p>
                 </div>
               )}
             </div>
@@ -149,10 +163,15 @@ export default async function Home({ searchParams }: {
       <footer className="bg-gray-900 text-gray-300 py-6 mt-8">
         <div className="max-w-4xl mx-auto px-4 text-center text-sm">
           <div className="flex justify-center items-center gap-2 mb-2">
-            <span className="text-2xl">🇹🇬</span>
+            <span className="text-2xl">🇹</span>
             <span className="font-bold text-white">TogoService</span>
           </div>
           <p>© 2025 TogoService. Fait avec ❤️ au Togo.</p>
+          <div className="flex justify-center gap-4 mt-3 text-xs">
+            <Link href="/login" className="hover:text-white transition">Connexion</Link>
+            <Link href="/register" className="hover:text-white transition">Devenir prestataire</Link>
+            <Link href="/profile" className="hover:text-white transition">Mon profil</Link>
+          </div>
         </div>
       </footer>
 
