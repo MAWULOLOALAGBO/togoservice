@@ -1,35 +1,40 @@
 import { supabase } from '@/lib/supabaseClient'
 
 export default async function Home() {
-  let providers: any[] = []
+  const { data: providers, error } = await supabase
+    .from('providers')
+    .select('*')
 
-  try {
-    const { data, error } = await supabase
-      .from('providers')
-      .select('*')
-
-    if (error) throw error
-    providers = data || []
-  } catch (error) {
-    console.error('Erreur:', error)
+  if (error) {
+    console.error('Erreur Supabase:', error)
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      {/* HEADER */}
-      <header className="bg-blue-600 text-white p-4 shadow-md sticky top-0 z-50">
-        <div className="max-w-md mx-auto flex justify-between items-center">
-          <h1 className="text-xl font-bold">TogoService 🇹</h1>
-          <span className="text-xs bg-blue-800 px-2 py-1 rounded">
-            {providers.length} disponibles
-          </span>
-        </div>
-      </header>
+    <div className="min-h-screen bg-gray-50 p-4">
+      <h1 className="text-2xl font-bold text-blue-600 mb-4">
+        TogoService 🇹
+      </h1>
+      
+      <p className="mb-4 text-gray-600">
+        {providers?.length || 0} prestataires trouvés
+      </p>
 
-      {/* LISTE */}
-      <main className="p-4 max-w-md mx-auto space-y-4">
-        {providers.map((p) => (
-          <div key={p.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-4">
-            <div className="flex justify-between items-start mb-2">
-              <div>
-                <h2 className="font-bold text-gray-
+      <div className="space-y-4">
+        {providers?.map((p: any) => (
+          <div key={p.id} className="bg-white p-4 rounded shadow">
+            <h2 className="font-bold">{p.nom}</h2>
+            <p className="text-sm text-gray-600">{p.metier}</p>
+            <p className="text-sm text-gray-500">{p.ville}</p>
+            <a 
+              href={`https://wa.me/${p.telephone}`} 
+              className="mt-2 inline-block bg-green-500 text-white px-4 py-2 rounded text-sm"
+              target="_blank"
+            >
+              WhatsApp
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
