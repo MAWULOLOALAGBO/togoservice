@@ -31,22 +31,16 @@ export default async function Home({ searchParams }: {
   return (
     <div className="min-h-screen flex flex-col bg-slate-900">
       
-      {/* 🇹🇬 HEADER AVEC ARMOIRIES ET DRAPEAU */}
-      {/* HEADER AVEC ARMOIRIES OFFICIELLES */}
       <header className="bg-gradient-to-r from-[#006A4E] via-[#FFCE00] to-[#D21034] p-5 shadow-2xl sticky top-0 z-50 relative overflow-hidden">
-        {/* Animation d'arrière-plan */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')] animate-pulse"></div>
         </div>
         
         <div className="max-w-6xl mx-auto flex justify-between items-center relative z-10">
           <div className="flex items-center gap-4">
-            {/* Armoiries du Togo */}
             <div className="w-16 h-16 bg-white rounded-full p-2 shadow-xl border-4 border-[#FFCE00] animate-pulse-slow">
               <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-lg">
-                {/* Drapeaux croisés */}
                 <g transform="translate(50, 30)">
-                  {/* Drapeau gauche incliné */}
                   <g transform="rotate(-25)">
                     <rect x="-15" y="-10" width="15" height="20" fill="#006A4E"/>
                     <rect x="0" y="-10" width="15" height="20" fill="#FFCE00"/>
@@ -55,7 +49,6 @@ export default async function Home({ searchParams }: {
                     <rect x="45" y="-10" width="15" height="20" fill="#D21034"/>
                     <polygon points="7,-3 8,1 12,1 9,4 10,8 7,5 4,8 5,4 2,1 6,1" fill="#FFFFFF"/>
                   </g>
-                  {/* Drapeau droit incliné */}
                   <g transform="rotate(25)">
                     <rect x="-15" y="-10" width="15" height="20" fill="#006A4E"/>
                     <rect x="0" y="-10" width="15" height="20" fill="#FFCE00"/>
@@ -65,21 +58,14 @@ export default async function Home({ searchParams }: {
                     <polygon points="7,-3 8,1 12,1 9,4 10,8 7,5 4,8 5,4 2,1 6,1" fill="#FFFFFF"/>
                   </g>
                 </g>
-                
-                {/* Soleil RT */}
                 <g transform="translate(50, 52)">
                   <circle cx="0" cy="0" r="15" fill="#FFCE00" stroke="#D21034" strokeWidth="2"/>
                   <text x="0" y="5" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#000">RT</text>
                 </g>
-                
-                {/* Lions stylisés */}
                 <path d="M25,85 Q20,80 22,75 Q25,70 28,75 Q30,80 28,90 Z" fill="#D21034"/>
                 <circle cx="25" cy="78" r="4" fill="#D21034"/>
-                
                 <path d="M75,85 Q80,80 78,75 Q75,70 72,75 Q70,80 72,90 Z" fill="#D21034"/>
                 <circle cx="75" cy="78" r="4" fill="#D21034"/>
-                
-                {/* Devise */}
                 <text x="50" y="12" textAnchor="middle" fontSize="5" fontWeight="bold" fill="#006A4E" letterSpacing="1">TRAVAIL LIBERTÉ PATRIE</text>
               </svg>
             </div>
@@ -95,20 +81,19 @@ export default async function Home({ searchParams }: {
               Connexion
             </Link>
             <Link href="/register" className="bg-[#006A4E] text-white px-5 py-2 rounded-lg font-bold hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#FFCE00]">
-              S'inscrire
+              S&apos;inscrire
             </Link>
           </nav>
         </div>
       </header>
 
-      {/* HERO ANIMÉ */}
       <section className="bg-gradient-to-b from-slate-800 to-slate-900 py-12 border-b border-slate-700">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 animate-fade-in-up">
             Trouvez un <span className="text-[#FFCE00]">prestataire</span>
           </h2>
           <p className="text-slate-300 text-lg mb-8 animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            Plombiers, couturières, répétiteurs, électriciens...
+            Plombiers, couturi&egrave;res, r&eacute;p&eacute;titeurs, &eacute;lectriciens...
           </p>
           <div className="animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
             <SearchBar />
@@ -116,7 +101,6 @@ export default async function Home({ searchParams }: {
         </div>
       </section>
 
-      {/* CONTENU */}
       <main className="flex-1 p-6">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -144,7 +128,7 @@ export default async function Home({ searchParams }: {
                     </div>
                     <p className="text-slate-300 mb-4">{p.description}</p>
                     <div className="flex items-center gap-2 text-sm text-slate-400 mb-4">
-                      <span></span><span>{p.ville} • {p.quartier}</span>
+                      <span>📍</span><span>{p.ville} • {p.quartier}</span>
                     </div>
                     <a href={`https://wa.me/${p.telephone?.replace(/\D/g, '')}`} target="_blank" className="btn-whatsapp block w-full text-center">
                       💬 Contacter sur WhatsApp
@@ -153,8 +137,8 @@ export default async function Home({ searchParams }: {
                 ))
               ) : (
                 <div className="text-center py-16 bg-slate-800 rounded-2xl border border-slate-700 animate-fade-in-up">
-                  <div className="text-6xl mb-4 animate-float"></div>
-                  <p className="text-slate-300 text-xl">Aucun résultat</p>
+                  <div className="text-6xl mb-4 animate-float">🔍</div>
+                  <p className="text-slate-300 text-xl">Aucun r&eacute;sultat</p>
                 </div>
               )}
             </div>
@@ -162,11 +146,10 @@ export default async function Home({ searchParams }: {
         </div>
       </main>
 
-      {/* FOOTER */}
       <footer className="bg-slate-950 text-slate-400 py-8 mt-12 border-t border-slate-800">
         <div className="max-w-6xl mx-auto px-4 text-center">
           <div className="flex justify-center items-center gap-2 mb-3">
-            <span className="text-2xl">🇬</span>
+            <span className="text-2xl">🇹🇬</span>
             <span className="font-bold text-white">TogoService</span>
           </div>
           <p>© 2025 TogoService. Fait avec ❤️ au Togo.</p>

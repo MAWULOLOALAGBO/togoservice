@@ -30,7 +30,7 @@ export default function SearchBar() {
           type="text"
           value={query}
           onChange={handleChange}
-          placeholder="Ex: Plombier à Lomé..."
+          placeholder={"Ex: Plombier à Lomé..."}
           className="flex-1 px-4 py-3 bg-slate-700 text-white border border-slate-600 rounded-lg focus:outline-none focus:border-[#FFCE00] focus:ring-2 focus:ring-[#FFCE00]/50 transition-all"
         />
         {query && (
@@ -50,7 +50,7 @@ export default function SearchBar() {
       
       {query && (
         <p className="text-xs text-slate-400 mt-2 text-left">
-          Recherche : "{query}"
+          Recherche : &quot;{query}&quot;
         </p>
       )}
     </div>
