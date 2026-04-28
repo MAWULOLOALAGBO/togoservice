@@ -11,7 +11,6 @@ export default function SearchBar() {
     const value = e.target.value;
     setQuery(value);
     
-    // Mise à jour de l'URL en temps réel
     if (value.trim()) {
       router.push(`/?search=${encodeURIComponent(value)}`, { scroll: false });
     } else {
@@ -32,25 +31,25 @@ export default function SearchBar() {
           value={query}
           onChange={handleChange}
           placeholder="Ex: Plombier à Lomé..."
-          className="flex-1 px-4 py-3 border-2 border-gray-200 rounded-lg focus:outline-none focus:border-[#006A4E] focus:ring-2 focus:ring-green-100 transition-all"
+          className="flex-1 px-4 py-3 bg-slate-700 text-white border border-slate-600 rounded-lg focus:outline-none focus:border-[#FFCE00] focus:ring-2 focus:ring-[#FFCE00]/50 transition-all"
         />
         {query && (
           <button
             onClick={handleClear}
-            className="bg-gray-300 hover:bg-gray-400 text-gray-700 px-4 rounded-lg font-medium transition"
+            className="bg-slate-600 hover:bg-slate-500 text-white px-4 rounded-lg font-medium transition"
           >
             ✕
           </button>
         )}
         <button 
-          className="bg-[#006A4E] hover:bg-green-800 text-white px-6 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl active:scale-95"
+          className="bg-[#006A4E] hover:bg-green-600 text-white px-6 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl active:scale-95"
         >
           🔍
         </button>
       </div>
       
       {query && (
-        <p className="text-xs text-gray-500 mt-2 text-left">
+        <p className="text-xs text-slate-400 mt-2 text-left">
           Recherche : "{query}"
         </p>
       )}

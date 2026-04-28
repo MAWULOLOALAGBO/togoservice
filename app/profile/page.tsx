@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
@@ -24,49 +24,52 @@ export default function ProfilePage() {
 
   const router = useRouter();
 
-  // Charger les données au montage
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        const {  user: currentUser } = await supabase.auth.getUser();
-        
-        if (!currentUser) {
-          router.push('/login');
-          return;
-        }
-        
-        setUser(currentUser);
-        
-        // Charger les infos du prestataire
-        const {  providerData } = await supabase
-          .from('providers')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .maybeSingle();
-        
-        if (providerData) {
-          setProvider(providerData);
-          setFormData({
-            nom: providerData.nom || '',
-            metier: providerData.metier || '',
-            ville: providerData.ville || '',
-            quartier: providerData.quartier || '',
-            telephone: providerData.telephone || '',
-            prixBas: providerData.prixBas?.toString() || '',
-            description: providerData.description || '',
-          });
-        }
-      } catch (err) {
-        console.error('Erreur chargement:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    loadData();
-  }, [supabase, router]);
+    checkUser();
+  }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const checkUser = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (!user) {
+        console.log('❌ Pas d\'utilisateur connecté');
+        router.push('/login');
+        return;
+      }
+      
+      console.log('✅ Utilisateur connecté:', user.email);
+      setUser(user);
+      
+      // Charger les infos du prestataire
+      const { data: providerData } = await supabase
+        .from('providers')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
+      
+      console.log('📊 Données prestataire:', providerData);
+      
+      if (providerData) {
+        setProvider(providerData);
+        setFormData({
+          nom: providerData.nom || '',
+          metier: providerData.metier || '',
+          ville: providerData.ville || '',
+          quartier: providerData.quartier || '',
+          telephone: providerData.telephone || '',
+          prixBas: providerData.prixBas?.toString() || '',
+          description: providerData.description || '',
+        });
+      }
+    } catch (err) {
+      console.error('Erreur chargement profil:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -89,15 +92,6 @@ export default function ProfilePage() {
       if (error) throw error;
       
       setMessage({ type: 'success', text: '✅ Modifications enregistrées !' });
-      
-      // Rafraîchir les données
-      const {  updated } = await supabase
-        .from('providers')
-        .select('*')
-        .eq('user_id', user?.id)
-        .maybeSingle();
-      if (updated) setProvider(updated);
-      
     } catch (err: any) {
       setMessage({ type: 'error', text: err.message || 'Erreur lors de la sauvegarde' });
     } finally {
@@ -112,7 +106,7 @@ export default function ProfilePage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('⚠️ Supprimer définitivement votre fiche ? Cette action est irréversible.')) return;
+    if (!confirm('⚠️ Supprimer définitivement votre fiche ?')) return;
     
     try {
       const { error } = await supabase
@@ -143,12 +137,12 @@ export default function ProfilePage() {
   }
 
   if (!user) {
-    return null; // Redirection en cours
+    return null;
   }
 
   return (
     <div className="min-h-screen bg-gray-50 pb-12">
-      {/* Header simplifié */}
+      {/* Header */}
       <header className="header-flag p-4 shadow-lg">
         <div className="max-w-2xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 text-white hover:opacity-90 transition">
@@ -165,7 +159,6 @@ export default function ProfilePage() {
       </header>
 
       <main className="max-w-2xl mx-auto p-4 mt-6">
-        {/* Message de feedback */}
         {message && (
           <div className={`p-4 rounded-lg mb-4 ${
             message.type === 'success' 
@@ -176,7 +169,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Carte profil */}
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           {/* En-tête profil */}
           <div className="bg-gradient-to-r from-[#006A4E] to-[#008B6B] p-6 text-white">
@@ -223,20 +215,15 @@ export default function ProfilePage() {
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
-                <select
+                <input
+                  type="text"
                   name="ville"
                   value={formData.ville}
                   onChange={handleChange}
                   required
+                  placeholder="Ex: Lomé"
                   className="input-togo"
-                >
-                  <option value="">Sélectionnez...</option>
-                  <option value="Lomé">Lomé</option>
-                  <option value="Kpalimé">Kpalimé</option>
-                  <option value="Sokodé">Sokodé</option>
-                  <option value="Kara">Kara</option>
-                  <option value="Dapaong">Dapaong</option>
-                </select>
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Quartier *</label>
@@ -257,8 +244,8 @@ export default function ProfilePage() {
                   value={formData.telephone}
                   onChange={handleChange}
                   required
-                  className="input-togo"
                   placeholder="+228..."
+                  className="input-togo"
                 />
               </div>
               <div>
@@ -287,7 +274,6 @@ export default function ProfilePage() {
               />
             </div>
 
-            {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
               <button
                 type="submit"
@@ -295,15 +281,9 @@ export default function ProfilePage() {
                 className="btn-togo flex-1 flex justify-center items-center gap-2"
               >
                 {saving ? (
-                  <>
-                    <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
-                    Enregistrement...
-                  </>
-                ) : (
-                  '💾 Enregistrer les modifications'
-                )}
+                  <><span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span> Enregistrement...</>
+                ) : '💾 Enregistrer'}
               </button>
-              
               <Link href="/" className="btn-togo-secondary flex-1 text-center">
                 🔙 Voir ma fiche
               </Link>

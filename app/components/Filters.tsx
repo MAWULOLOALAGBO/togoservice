@@ -13,11 +13,9 @@ export default function Filters({ providers }: FiltersProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  // Extraire les villes et métiers uniques
   const cities = Array.from(new Set(providers.map((p) => p.ville))).sort();
   const jobs = Array.from(new Set(providers.map((p) => p.metier))).sort();
 
-  // Initialiser depuis l'URL
   useEffect(() => {
     setSelectedCity(searchParams.get('ville') || '');
     setSelectedJob(searchParams.get('metier') || '');
@@ -25,10 +23,8 @@ export default function Filters({ providers }: FiltersProps) {
 
   const applyFilters = () => {
     const params = new URLSearchParams();
-    
     if (selectedCity) params.set('ville', selectedCity);
     if (selectedJob) params.set('metier', selectedJob);
-    
     router.push(`/?${params.toString()}`);
   };
 
@@ -41,76 +37,58 @@ export default function Filters({ providers }: FiltersProps) {
   const hasActiveFilters = selectedCity || selectedJob;
 
   return (
-    <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-200 space-y-3">
-      
-      {/* Ville */}
+    <div className="bg-slate-800 rounded-2xl p-5 border border-slate-700 shadow-lg space-y-4 animate-fade-in-up">
+      <div className="flex justify-between items-center">
+        <h3 className="font-bold text-white text-lg">🔍 Filtres</h3>
+        {hasActiveFilters && (
+          <button onClick={clearFilters} className="text-sm text-[#D21034] hover:text-red-400 font-medium transition">
+            Réinitialiser
+          </button>
+        )}
+      </div>
+
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Ville
-        </label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">Ville</label>
         <select
           value={selectedCity}
           onChange={(e) => setSelectedCity(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A4E] bg-white"
+          className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A4E] text-white"
         >
           <option value="">Toutes les villes</option>
           {cities.map((city) => (
-            <option key={city} value={city}>
-              {city}
-            </option>
+            <option key={city} value={city}>{city}</option>
           ))}
         </select>
       </div>
 
-      {/* Métier */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Métier
-        </label>
+        <label className="block text-sm font-medium text-slate-300 mb-1">Métier</label>
         <select
           value={selectedJob}
           onChange={(e) => setSelectedJob(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A4E] bg-white"
+          className="w-full px-3 py-2 bg-slate-700 border border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A4E] text-white"
         >
           <option value="">Tous les métiers</option>
           {jobs.map((job) => (
-            <option key={job} value={job}>
-              {job}
-            </option>
+            <option key={job} value={job}>{job}</option>
           ))}
         </select>
       </div>
 
-      {/* Bouton Appliquer */}
       <button
         onClick={applyFilters}
-        className="w-full bg-[#006A4E] hover:bg-green-800 text-white font-semibold py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg"
+        className="w-full bg-[#006A4E] hover:bg-green-600 text-white font-bold py-2.5 rounded-lg transition-all shadow-md hover:shadow-lg active:scale-95"
       >
         Rechercher
       </button>
 
-      {/* Réinitialiser si filtres actifs */}
       {hasActiveFilters && (
-        <button
-          onClick={clearFilters}
-          className="w-full text-sm text-gray-500 hover:text-gray-700 py-1"
-        >
-          Voir tous les prestataires
-        </button>
-      )}
-
-      {/* Tags des filtres actifs */}
-      {hasActiveFilters && (
-        <div className="flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+        <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-600">
           {selectedCity && (
-            <span className="text-xs bg-green-50 text-[#006A4E] px-2 py-1 rounded-full">
-              📍 {selectedCity}
-            </span>
+            <span className="text-xs bg-green-900 text-green-300 px-2 py-1 rounded-full">📍 {selectedCity}</span>
           )}
           {selectedJob && (
-            <span className="text-xs bg-yellow-50 text-yellow-800 px-2 py-1 rounded-full">
-              💼 {selectedJob}
-            </span>
+            <span className="text-xs bg-yellow-900 text-yellow-300 px-2 py-1 rounded-full">💼 {selectedJob}</span>
           )}
         </div>
       )}

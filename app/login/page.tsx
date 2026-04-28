@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { supabase } from '@/lib/supabaseClient';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -10,7 +9,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -18,16 +16,15 @@ export default function LoginPage() {
     setError('');
 
     try {
-      const { error: signInError } = await supabase.auth.signInWithPassword({
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (signInError) throw signInError;
+      if (!data.user) throw new Error('Connexion échouée');
 
-      // Connexion réussie → rediriger vers l'accueil
-      router.push('/');
-      router.refresh();
+      window.location.href = '/profile';
     } catch (err: any) {
       setError(err.message || 'Erreur de connexion');
     } finally {
@@ -36,41 +33,41 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
-        <div className="text-center mb-6">
-          <span className="text-4xl">🇹🇬</span>
-          <h1 className="text-2xl font-bold text-gray-900 mt-2">Connexion</h1>
-          <p className="text-gray-600 text-sm mt-1">Accédez à votre espace prestataire</p>
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
+      <div className="bg-slate-800 rounded-2xl shadow-2xl p-8 max-w-md w-full border border-slate-700 animate-fade-in-up">
+        <div className="text-center mb-8">
+          <span className="text-5xl">🇹🇬</span>
+          <h1 className="text-3xl font-bold text-white mt-4">Connexion</h1>
+          <p className="text-slate-400 text-sm mt-2">Accédez à votre espace prestataire</p>
         </div>
 
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+          <div className="bg-red-900/50 border border-red-500 text-red-200 px-4 py-3 rounded-lg mb-6 text-sm">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Email</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A4E]"
+              className="input-togo"
               placeholder="votre@email.com"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Mot de passe</label>
+            <label className="block text-sm font-medium text-slate-300 mb-2">Mot de passe</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#006A4E]"
+              className="input-togo"
               placeholder="••••••••"
             />
           </div>
@@ -78,22 +75,16 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#006A4E] hover:bg-green-800 text-white font-bold py-3 rounded-lg transition-all duration-200 disabled:opacity-50 shadow-lg hover:shadow-xl"
+            className="btn-togo w-full text-lg"
           >
             {loading ? 'Connexion...' : 'Se connecter'}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-slate-400 mt-8">
           Pas encore de compte ?{' '}
-          <Link href="/register" className="text-[#006A4E] font-semibold hover:underline">
+          <Link href="/register" className="text-[#FFCE00] font-bold hover:text-yellow-300 transition">
             S'inscrire
-          </Link>
-        </p>
-
-        <p className="text-center text-xs text-gray-400 mt-4">
-          <Link href="/" className="hover:text-gray-600">
-            ← Retour à l'accueil
           </Link>
         </p>
       </div>
