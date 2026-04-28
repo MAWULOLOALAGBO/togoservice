@@ -30,25 +30,20 @@ export default function ProfilePage() {
 
   const checkUser = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data, error } = await supabase.auth.getUser();
       
-      if (!user) {
-        console.log('❌ Pas d\'utilisateur connecté');
+      if (error || !data?.user) {
         router.push('/login');
         return;
       }
       
-      console.log('✅ Utilisateur connecté:', user.email);
-      setUser(user);
+      setUser(data.user);
       
-      // Charger les infos du prestataire
       const { data: providerData } = await supabase
         .from('providers')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', data.user.id)
         .maybeSingle();
-      
-      console.log('📊 Données prestataire:', providerData);
       
       if (providerData) {
         setProvider(providerData);
@@ -127,10 +122,10 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-[#006A4E] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement...</p>
+          <p className="text-slate-400">Chargement...</p>
         </div>
       </div>
     );
@@ -141,58 +136,56 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
+    <div className="min-h-screen bg-slate-900 pb-12">
       {/* Header */}
-      <header className="header-flag p-4 shadow-lg">
+      <header className="bg-slate-800 border-b border-slate-700 p-4 shadow-lg">
         <div className="max-w-2xl mx-auto flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-2 text-white hover:opacity-90 transition">
-            <span className="text-2xl">🇹🇬</span>
+          <Link href="/" className="flex items-center gap-2 text-white hover:text-[#FFCE00] transition">
+            <span className="text-2xl">🇹</span>
             <span className="font-bold">TogoService</span>
           </Link>
           <button 
             onClick={handleSignOut}
-            className="text-sm bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg transition"
+            className="text-sm text-red-400 hover:text-red-300 font-medium"
           >
             Déconnexion
           </button>
         </div>
       </header>
 
-      <main className="max-w-2xl mx-auto p-4 mt-6">
+      <main className="max-w-2xl mx-auto p-4 mt-6 animate-fade-in-up">
         {message && (
-          <div className={`p-4 rounded-lg mb-4 ${
+          <div className={`p-4 rounded-xl mb-6 text-center font-bold ${
             message.type === 'success' 
-              ? 'bg-green-50 text-green-800 border border-green-200' 
-              : 'bg-red-50 text-red-800 border border-red-200'
+              ? 'bg-green-900/50 text-green-300 border border-green-700' 
+              : 'bg-red-900/50 text-red-300 border border-red-700'
           }`}>
             {message.text}
           </div>
         )}
 
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
           {/* En-tête profil */}
-          <div className="bg-gradient-to-r from-[#006A4E] to-[#008B6B] p-6 text-white">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center text-2xl">
+          <div className="bg-gradient-to-r from-[#006A4E] to-[#008B6B] p-8 text-white text-center relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 border-2 border-[#FFCE00]">
                 👤
               </div>
-              <div>
-                <h1 className="text-xl font-bold">{formData.nom || 'Mon profil'}</h1>
-                <p className="text-sm opacity-90">{user.email}</p>
-                {provider?.created_at && (
-                  <p className="text-xs opacity-75 mt-1">
-                    Membre depuis {new Date(provider.created_at).toLocaleDateString('fr-FR')}
-                  </p>
-                )}
-              </div>
+              <h1 className="text-2xl font-bold">{formData.nom || 'Mon Profil'}</h1>
+              <p className="text-sm opacity-90">{user.email}</p>
+              {provider?.created_at && (
+                <p className="text-xs opacity-75 mt-1">
+                  Membre depuis {new Date(provider.created_at).toLocaleDateString('fr-FR')}
+                </p>
+              )}
             </div>
           </div>
 
           {/* Formulaire */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-5">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form onSubmit={handleSubmit} className="p-8 space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nom de l'activité *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Nom de l'activité *</label>
                 <input
                   type="text"
                   name="nom"
@@ -203,7 +196,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Métier *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Métier *</label>
                 <input
                   type="text"
                   name="metier"
@@ -214,7 +207,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ville *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Ville *</label>
                 <input
                   type="text"
                   name="ville"
@@ -226,7 +219,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Quartier *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Quartier *</label>
                 <input
                   type="text"
                   name="quartier"
@@ -237,7 +230,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Téléphone *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Téléphone *</label>
                 <input
                   type="tel"
                   name="telephone"
@@ -249,7 +242,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Prix de base (FCFA) *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Prix de base (FCFA) *</label>
                 <input
                   type="number"
                   name="prixBas"
@@ -263,7 +256,7 @@ export default function ProfilePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-slate-400 mb-2">Description</label>
               <textarea
                 name="description"
                 value={formData.description}
@@ -274,7 +267,7 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-slate-700">
               <button
                 type="submit"
                 disabled={saving}
@@ -291,12 +284,12 @@ export default function ProfilePage() {
           </form>
 
           {/* Zone danger */}
-          <div className="px-6 pb-6">
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-              <h3 className="font-semibold text-red-800 text-sm mb-2">⚠️ Zone de danger</h3>
+          <div className="px-8 pb-8">
+            <div className="bg-red-900/20 border border-red-900/50 rounded-xl p-4">
+              <h3 className="font-semibold text-red-400 text-sm mb-2">⚠️ Zone de danger</h3>
               <button
                 onClick={handleDelete}
-                className="text-sm text-red-600 hover:text-red-800 font-medium underline"
+                className="text-sm text-red-400 hover:text-red-300 font-medium underline"
               >
                 Supprimer définitivement ma fiche
               </button>

@@ -32,30 +32,69 @@ export default async function Home({ searchParams }: {
     <div className="min-h-screen flex flex-col bg-slate-900">
       
       {/* 🇹🇬 HEADER AVEC ARMOIRIES ET DRAPEAU */}
-      <header className="header-togo p-5 shadow-2xl sticky top-0 z-50 relative">
-        {/* Drapeau animé en background */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#006A4E] via-[#FFCE00] to-[#D21034] opacity-20 animate-pulse"></div>
+      {/* HEADER AVEC ARMOIRIES OFFICIELLES */}
+      <header className="bg-gradient-to-r from-[#006A4E] via-[#FFCE00] to-[#D21034] p-5 shadow-2xl sticky top-0 z-50 relative overflow-hidden">
+        {/* Animation d'arrière-plan */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIgZmlsbD0id2hpdGUiLz48L3N2Zz4=')] animate-pulse"></div>
+        </div>
         
         <div className="max-w-6xl mx-auto flex justify-between items-center relative z-10">
           <div className="flex items-center gap-4">
-            {/* SVG Armoiries du Togo Simplifié */}
-            <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-[#FFCE00]">
-              <svg viewBox="0 0 50 50" className="w-8 h-8">
-                <polygon points="25,5 30,20 45,20 32,30 37,45 25,35 13,45 18,30 5,20 20,20" fill="#006A4E" stroke="#FFCE00" strokeWidth="2"/>
-                <text x="25" y="48" fontSize="5" textAnchor="middle" fill="white" fontWeight="bold">TG</text>
+            {/* Armoiries du Togo */}
+            <div className="w-16 h-16 bg-white rounded-full p-2 shadow-xl border-4 border-[#FFCE00] animate-pulse-slow">
+              <svg viewBox="0 0 100 120" className="w-full h-full drop-shadow-lg">
+                {/* Drapeaux croisés */}
+                <g transform="translate(50, 30)">
+                  {/* Drapeau gauche incliné */}
+                  <g transform="rotate(-25)">
+                    <rect x="-15" y="-10" width="15" height="20" fill="#006A4E"/>
+                    <rect x="0" y="-10" width="15" height="20" fill="#FFCE00"/>
+                    <rect x="15" y="-10" width="15" height="20" fill="#FFCE00"/>
+                    <rect x="30" y="-10" width="15" height="20" fill="#FFFFFF"/>
+                    <rect x="45" y="-10" width="15" height="20" fill="#D21034"/>
+                    <polygon points="7,-3 8,1 12,1 9,4 10,8 7,5 4,8 5,4 2,1 6,1" fill="#FFFFFF"/>
+                  </g>
+                  {/* Drapeau droit incliné */}
+                  <g transform="rotate(25)">
+                    <rect x="-15" y="-10" width="15" height="20" fill="#006A4E"/>
+                    <rect x="0" y="-10" width="15" height="20" fill="#FFCE00"/>
+                    <rect x="15" y="-10" width="15" height="20" fill="#FFCE00"/>
+                    <rect x="30" y="-10" width="15" height="20" fill="#FFFFFF"/>
+                    <rect x="45" y="-10" width="15" height="20" fill="#D21034"/>
+                    <polygon points="7,-3 8,1 12,1 9,4 10,8 7,5 4,8 5,4 2,1 6,1" fill="#FFFFFF"/>
+                  </g>
+                </g>
+                
+                {/* Soleil RT */}
+                <g transform="translate(50, 52)">
+                  <circle cx="0" cy="0" r="15" fill="#FFCE00" stroke="#D21034" strokeWidth="2"/>
+                  <text x="0" y="5" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#000">RT</text>
+                </g>
+                
+                {/* Lions stylisés */}
+                <path d="M25,85 Q20,80 22,75 Q25,70 28,75 Q30,80 28,90 Z" fill="#D21034"/>
+                <circle cx="25" cy="78" r="4" fill="#D21034"/>
+                
+                <path d="M75,85 Q80,80 78,75 Q75,70 72,75 Q70,80 72,90 Z" fill="#D21034"/>
+                <circle cx="75" cy="78" r="4" fill="#D21034"/>
+                
+                {/* Devise */}
+                <text x="50" y="12" textAnchor="middle" fontSize="5" fontWeight="bold" fill="#006A4E" letterSpacing="1">TRAVAIL LIBERTÉ PATRIE</text>
               </svg>
             </div>
+            
             <div>
               <h1 className="text-2xl font-bold text-white drop-shadow-lg">TogoService</h1>
-              <p className="text-xs text-white/80">Prestataires locaux</p>
+              <p className="text-xs text-white/90 font-medium">Prestataires locaux de confiance</p>
             </div>
           </div>
           
           <nav className="flex gap-4 text-sm font-bold">
-            <Link href="/login" className="hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-300 border border-white/30 hover:border-white">
+            <Link href="/login" className="hover:bg-white/20 text-white px-4 py-2 rounded-lg transition-all duration-300 border border-white/30 hover:border-white backdrop-blur-sm">
               Connexion
             </Link>
-            <Link href="/register" className="bg-[#FFCE00] text-[#006A4E] px-5 py-2 rounded-lg font-bold hover:bg-white transition-all duration-300 shadow-lg hover:shadow-xl">
+            <Link href="/register" className="bg-[#006A4E] text-white px-5 py-2 rounded-lg font-bold hover:bg-green-700 transition-all duration-300 shadow-lg hover:shadow-xl border-2 border-[#FFCE00]">
               S'inscrire
             </Link>
           </nav>
