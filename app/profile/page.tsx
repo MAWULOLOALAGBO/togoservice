@@ -39,7 +39,7 @@ export default function ProfilePage() {
       
       setUser(data.user);
       
-      const { data: providerData } = await supabase
+      const {  providerData } = await supabase
         .from('providers')
         .select('*')
         .eq('user_id', data.user.id)
@@ -101,7 +101,7 @@ export default function ProfilePage() {
   };
 
   const handleDelete = async () => {
-    if (!confirm('⚠️ Supprimer définitivement votre fiche ?')) return;
+    if (!confirm("⚠️ Supprimer d&eacute;finitivement votre fiche ?")) return;
     
     try {
       const { error } = await supabase
@@ -137,18 +137,17 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-slate-900 pb-12">
-      {/* Header */}
       <header className="bg-slate-800 border-b border-slate-700 p-4 shadow-lg">
         <div className="max-w-2xl mx-auto flex justify-between items-center">
           <Link href="/" className="flex items-center gap-2 text-white hover:text-[#FFCE00] transition">
-            <span className="text-2xl">🇹</span>
+            <span className="text-2xl">🇹🇬</span>
             <span className="font-bold">TogoService</span>
           </Link>
           <button 
             onClick={handleSignOut}
             className="text-sm text-red-400 hover:text-red-300 font-medium"
           >
-            Déconnexion
+            D&eacute;connexion
           </button>
         </div>
       </header>
@@ -165,7 +164,6 @@ export default function ProfilePage() {
         )}
 
         <div className="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden border border-slate-700">
-          {/* En-tête profil */}
           <div className="bg-gradient-to-r from-[#006A4E] to-[#008B6B] p-8 text-white text-center relative overflow-hidden">
             <div className="relative z-10">
               <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 border-2 border-[#FFCE00]">
@@ -181,11 +179,10 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Formulaire */}
           <form onSubmit={handleSubmit} className="p-8 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2">Nom de l'activité *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Nom de l&apos;activit&eacute; *</label>
                 <input
                   type="text"
                   name="nom"
@@ -196,7 +193,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2">Métier *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">M&eacute;tier *</label>
                 <input
                   type="text"
                   name="metier"
@@ -230,7 +227,7 @@ export default function ProfilePage() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2">Téléphone *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-2">T&eacute;l&eacute;phone *</label>
                 <input
                   type="tel"
                   name="telephone"
@@ -263,7 +260,7 @@ export default function ProfilePage() {
                 onChange={handleChange}
                 rows={4}
                 className="input-togo resize-none"
-                placeholder="Décrivez vos services..."
+                placeholder="D&eacute;crivez vos services..."
               />
             </div>
 
@@ -283,7 +280,6 @@ export default function ProfilePage() {
             </div>
           </form>
 
-          {/* Zone danger */}
           <div className="px-8 pb-8">
             <div className="bg-red-900/20 border border-red-900/50 rounded-xl p-4">
               <h3 className="font-semibold text-red-400 text-sm mb-2">⚠️ Zone de danger</h3>
@@ -291,7 +287,7 @@ export default function ProfilePage() {
                 onClick={handleDelete}
                 className="text-sm text-red-400 hover:text-red-300 font-medium underline"
               >
-                Supprimer définitivement ma fiche
+                Supprimer d&eacute;finitivement ma fiche
               </button>
             </div>
           </div>
